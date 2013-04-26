@@ -2,7 +2,7 @@
     "name": "gpawlik/the-support",
     "description": "Useful Zend's stuff",
     "require-dev": {
-        "phpunit/phpunit": "3.17.*"
+        "phpunit/phpunit": "3.*"
     },
     "license": "MIT",
     "authors": [

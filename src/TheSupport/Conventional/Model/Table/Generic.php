@@ -20,9 +20,9 @@ class Generic {
      * @param \Closure $with_select_do
      * @return \Zend\Db\ResultSet\ResultSet
      */
-    public function fetchAll($select = null, \Closure $with_select_do = null)
+    public function fetchAll(\Closure $with_select_do = null)
     {
-        $select = $select ?: new Select($this->tableGateway->table);
+        $select = new Select($this->tableGateway->table);
         if($with_select_do instanceof \Closure) {
             $with_select_do($select);
         }

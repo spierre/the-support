@@ -10,6 +10,11 @@ class Generic {
      */
     protected $tableGateway;
 
+    /**
+     * @var \Zend\Db\Sql\Select
+     */
+    protected $select;
+
     public function __construct(AbstractTableGateway $tableGateway)
     {
         $this->tableGateway = $tableGateway;
@@ -22,10 +27,29 @@ class Generic {
      */
     public function fetchAll(\Closure $with_select_do = null)
     {
-        $select = new Select($this->tableGateway->table);
+        $select = $this->getSelect();
         if($with_select_do instanceof \Closure) {
             $with_select_do($select);
         }
         return $this->tableGateway->selectWith($select);
+    }
+
+    /**
+     * @param Select $select
+     */
+    public function setSelect(Select $select)
+    {
+        $this->select = $select;
+    }
+
+    /**
+     * @return Select
+     */
+    public function getSelect()
+    {
+        if($this->select == null) {
+            $this->select = new Select($this->tableGateway->getTable());
+        }
+        return $this->select;
     }
 }

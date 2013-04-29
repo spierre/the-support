@@ -1,0 +1,7 @@
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="Conventional">
+            <directory>test/TheSupport/Conventional</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

@@ -32,12 +32,19 @@ class Base {
         $method = 'get' . $name;
         if (('mapper' == $name) || !method_exists($this, $method)) {
             if(in_array($name, $this->attrs)) {
-                return $this->$name;
+                return isset($this->$name)? $this->$name: null;
             }
         }
         return $this->$method();
     }
 
+    public function __call($name, $arguments)
+    {
+        if( strpos($name, 'get')== 0) {
+            $attr = strtolower( substr($name, 3, strlen($name)) );
+            return $this->$attr;
+        }
+    }
 
     public function __construct($options = array())
     {

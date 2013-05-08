@@ -36,5 +36,5 @@ class BaseTest extends \PHPUnit_Framework_TestCase {
 }
 
 class DummyModel extends Base {
-    protected $attrs = array("field", 'field2');
+    protected $attrs = array("field", 'field2', 'id');
 }

@@ -25,7 +25,7 @@ abstract class Base {
      * @note no combined primary keys supported
      */
     public function getId() {
-        return $this->{$this->getPk()};
+        return isset($this->{$this->getPk()})? $this->{$this->getPk()}: null;
     }
 
     /**

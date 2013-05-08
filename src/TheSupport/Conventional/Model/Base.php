@@ -6,7 +6,7 @@ namespace TheSupport\Conventional\Model;
  * Class Base
  * @package ZendSupportUtils\Model
  */
-class Base {
+abstract class Base {
 
     /**
      * Override this in your model
@@ -14,6 +14,26 @@ class Base {
      * @var array $attrs - Accessible attributes to DB fields matching
      */
     protected $attrs = array();
+
+    /**
+     * @var string Primary key name
+     */
+
+    /**
+     * @return mixed
+     * @note no combined primary keys supported
+     */
+    public function getId() {
+        return $this->{$this->getPk()};
+    }
+
+    /**
+     * @return string Primary key name
+     */
+    public function getPk()
+    {
+        return $this->pk;
+    }
 
     public function __set($name, $value)
     {

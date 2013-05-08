@@ -1,6 +1,7 @@
 <?php
 namespace TheSupport\Conventional\Model\Table;
 
+use TheSupport\Conventional\Model\Base;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 
@@ -51,5 +52,33 @@ class Generic {
             $this->select = new Select($this->tableGateway->getTable());
         }
         return $this->select;
+    }
+
+    public function save(Base $entity)
+    {
+
+        if($entity->getId() === null) {
+            $this->tableGateway->insert($entity->toArray());
+        }else {
+            $this->tableGateway->update($entity->toArray(), array($entity->getPk() => $entity->getId()));
+        }
+
+    }
+
+    public function find($id)
+    {
+        $model = $this->getModelObject();
+        $rows = $this->tableGateway->select(
+            array( $model->getPk() => $id )
+        );
+        return $rows->current();
+    }
+
+    /**
+     * @return \ArrayObject
+     */
+    public function getModelObject()
+    {
+        return $this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype();
     }
 }

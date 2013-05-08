@@ -54,15 +54,17 @@ class Generic {
         return $this->select;
     }
 
-    public function save(Base $entity)
+    public function save(Base $entity, $nullifyEmptyData = true)
     {
 
-        if($entity->getId() === null) {
-            $this->tableGateway->insert($entity->toArray());
+        $id = $entity->getId();
+        $data = $entity->toArray($nullifyEmptyData);
+        if(empty($id)) {
+            $this->tableGateway->insert($data);
         }else {
             try{
-                if($this->find($entity->getId())) {
-                    $this->tableGateway->update($entity->toArray(), array($entity->getPk() => $entity->getId()));
+                if($this->find($id)) {
+                    $this->tableGateway->update($data, array($entity->getPk() => $entity->getId()));
                 }
             }catch(Exception $e){
                 throw new Exception("Trying to update not existing entity", 0, $e);

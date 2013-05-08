@@ -18,6 +18,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(23, $model->getField());
 
     }
+
+    public function test_to_array_nullify_empty_fields_by_default()
+    {
+        $model = new DummyModel(array('field' => ''));
+        $data = $model->toArray();
+        $this->assertTrue($data['field'] === null);
+    }
+
+    public function test_toArray_allow_nullification()
+    {
+        $model = new DummyModel(array('field' => ''));
+        $data = $model->toArray(false);
+        $this->assertTrue($data['field'] === '');
+    }
 }
 
 class DummyModel extends Base {

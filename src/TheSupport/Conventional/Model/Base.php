@@ -80,10 +80,13 @@ abstract class Base {
         return $this;
     }
 
-    public function toArray()
+    public function toArray($nullifyEmptyStrings = true)
     {
         $data = array();
         foreach($this->attrs as $field) {
+            if(empty($this->field) && $nullifyEmptyStrings) {
+                $this->field = null;
+            }
             $data[$field] = $this->$field;
         }
         return $data;

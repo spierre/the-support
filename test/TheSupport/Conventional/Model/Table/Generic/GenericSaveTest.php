@@ -72,6 +72,54 @@ class GenericSaveTest extends \PHPUnit_Framework_TestCase {
         $table->save($entity);
     }
 
+    public function test_should_nullify_empty_data_by_default()
+    {
+        /** @var \Zend\Db\TableGateway\TableGateway|\PHPUnit_Framework_MockObject_MockObject $tableGateway */
+        $tableGateway = $this->getMock('\Zend\Db\TableGateway\TableGateway',
+            array('insert'), array(), '', false
+        );
+
+        /** @var \TheSupport\Conventional\Model\Table\Generic|\PHPUnit_Framework_MockObject_MockObject $table */
+        $table = $this->getMock('\TheSupport\Conventional\Model\Table\Generic', array('find'), array($tableGateway));
+
+        /** @var DummyModel|\PHPUnit_Framework_MockObject_MockObject $entity */
+        $entity = $this->getMock(__NAMESPACE__ . '\DummyModel', array('toArray'),
+            array(array("field" => '', 'pkField' => ''))
+        );
+        $entity->expects($this->once())
+            ->method('toArray')
+            ->with(true);
+
+        $tableGateway->expects($this->once())
+            ->method('insert');
+
+        $table->save($entity);
+    }
+    public function test_should_cancel_nullification_of_empty_datat()
+    {
+        /** @var \Zend\Db\TableGateway\TableGateway|\PHPUnit_Framework_MockObject_MockObject $tableGateway */
+        $tableGateway = $this->getMock('\Zend\Db\TableGateway\TableGateway',
+            array('insert'), array(), '', false
+        );
+
+        /** @var \TheSupport\Conventional\Model\Table\Generic|\PHPUnit_Framework_MockObject_MockObject $table */
+        $table = $this->getMock('\TheSupport\Conventional\Model\Table\Generic', array('find'), array($tableGateway));
+
+        /** @var DummyModel|\PHPUnit_Framework_MockObject_MockObject $entity */
+        $entity = $this->getMock(__NAMESPACE__ . '\DummyModel', array('toArray'),
+            array(array("field" => '', 'pkField' => ''))
+        );
+        $entity->expects($this->once())
+            ->method('toArray')
+            ->with(false);
+
+        $tableGateway->expects($this->once())
+            ->method('insert');
+
+        $table->save($entity, false);
+    }
+
+
 
 }
 

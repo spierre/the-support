@@ -60,7 +60,8 @@ class Generic {
         $id = $entity->getId();
         $data = $entity->toArray($nullifyEmptyData);
         if(empty($id)) {
-            $this->tableGateway->insert($data);
+            $id = $this->tableGateway->insert($data);
+            $entity->setId($id);
         }else {
             try{
                 if($this->find($id)) {
@@ -70,6 +71,9 @@ class Generic {
                 throw new Exception("Trying to update not existing entity", 0, $e);
             }
         }
+
+
+        return $entity;
 
     }
 

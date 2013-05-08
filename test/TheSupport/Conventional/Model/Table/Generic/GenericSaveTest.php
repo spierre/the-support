@@ -95,6 +95,8 @@ class GenericSaveTest extends \PHPUnit_Framework_TestCase {
 
         $table->save($entity);
     }
+
+
     public function test_should_cancel_nullification_of_empty_datat()
     {
         /** @var \Zend\Db\TableGateway\TableGateway|\PHPUnit_Framework_MockObject_MockObject $tableGateway */
@@ -117,6 +119,30 @@ class GenericSaveTest extends \PHPUnit_Framework_TestCase {
             ->method('insert');
 
         $table->save($entity, false);
+    }
+
+    public function test_should_return_updated_entity()
+    {
+        /** @var \Zend\Db\TableGateway\TableGateway|\PHPUnit_Framework_MockObject_MockObject $tableGateway */
+        $tableGateway = $this->getMock('\Zend\Db\TableGateway\TableGateway',
+            array('insert'), array(), '', false
+        );
+
+        /** @var \TheSupport\Conventional\Model\Table\Generic|\PHPUnit_Framework_MockObject_MockObject $table */
+        $table = $this->getMock('\TheSupport\Conventional\Model\Table\Generic', array('find'), array($tableGateway));
+
+        /** @var DummyModel|\PHPUnit_Framework_MockObject_MockObject $entity */
+        $entity = $this->getMock(__NAMESPACE__ . '\DummyModel', array('toArray'),
+            array(array("field" => '', 'pkField' => ''))
+        );
+
+        $tableGateway->expects($this->once())
+            ->method('insert')
+            ->will($this->returnValue(123));
+
+        $savedEntity = $table->save($entity);
+
+        $this->assertEquals(123, $savedEntity->getId());
     }
 
 

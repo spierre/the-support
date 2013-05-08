@@ -28,6 +28,13 @@ abstract class Base {
     }
 
     /**
+     * @param mixed $value
+     */
+    public function setId($value){
+        $this->{$this->getPk()} = $value;
+    }
+
+    /**
      * @return string Primary key name
      */
     public function getPk()

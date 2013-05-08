@@ -10,6 +10,29 @@ class GenericFindTest extends \PHPUnit_Framework_TestCase {
 
     public function test_find_should_call_select_for_pk()
     {
+        $entityId = 666;
+        $table = $this->mockTableWithExistingEntity($entityId);
+
+        $this->assertInstanceOf(__NAMESPACE__ .'\DummyModel', $table->find(666));
+    }
+
+
+    public function test_find_should_throw_exception_if_no_results_found()
+    {
+        $entityId = 666;
+        $table = $this->mockTableWithNotExistingEntity($entityId);
+
+        $this->setExpectedException('\TheSupport\Conventional\Model\Table\Exception');
+
+        $table->find(666);
+    }
+
+    /**
+     * @param $entityId
+     * @return \PHPUnit_Framework_MockObject_MockObject|Generic
+     */
+    private function mockTableWithExistingEntity($entityId)
+    {
         /** @var \Zend\Db\TableGateway\TableGateway|\PHPUnit_Framework_MockObject_MockObject $tableGateway */
         $tableGateway = $this->getMock('\Zend\Db\TableGateway\TableGateway',
             array('select', 'getModelObject'), array(), '', false
@@ -29,11 +52,33 @@ class GenericFindTest extends \PHPUnit_Framework_TestCase {
 
         $tableGateway->expects($this->once())
             ->method('select')
-            ->with(array('pkField' => 666))
+            ->with(array('pkField' => $entityId))
             ->will($this->returnValue($set));
+        return $table;
+    }
 
-        $this->assertInstanceOf(__NAMESPACE__ .'\DummyModel', $table->find(666));
+    /**
+     * @param $entityId
+     * @return \PHPUnit_Framework_MockObject_MockObject|Generic
+     */
+    private function mockTableWithNotExistingEntity($entityId)
+    {
+        /** @var \Zend\Db\TableGateway\TableGateway|\PHPUnit_Framework_MockObject_MockObject $tableGateway */
+        $tableGateway = $this->getMock('\Zend\Db\TableGateway\TableGateway',
+            array('select', 'getModelObject'), array(), '', false
+        );
 
+        /** @var \TheSupport\Conventional\Model\Table\Generic|\PHPUnit_Framework_MockObject_MockObject $table */
+        $table = $this->getMock('\TheSupport\Conventional\Model\Table\Generic', array('getModelObject'), array($tableGateway));
+        $table->expects($this->any())
+            ->method('getModelObject')
+            ->will($this->returnValue(new DummyModel()));
+
+        $tableGateway->expects($this->once())
+            ->method('select')
+            ->with(array('pkField' => $entityId))
+            ->will($this->returnValue(null));
+        return $table;
     }
 
 

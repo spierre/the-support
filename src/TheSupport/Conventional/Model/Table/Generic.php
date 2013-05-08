@@ -71,6 +71,9 @@ class Generic {
         $rows = $this->tableGateway->select(
             array( $model->getPk() => $id )
         );
+        if(!$rows) {
+            throw new Exception("Could not find row $id");
+        }
         return $rows->current();
     }
 

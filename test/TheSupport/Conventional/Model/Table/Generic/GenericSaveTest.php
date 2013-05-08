@@ -125,7 +125,7 @@ class GenericSaveTest extends \PHPUnit_Framework_TestCase {
     {
         /** @var \Zend\Db\TableGateway\TableGateway|\PHPUnit_Framework_MockObject_MockObject $tableGateway */
         $tableGateway = $this->getMock('\Zend\Db\TableGateway\TableGateway',
-            array('insert'), array(), '', false
+            array('insert', 'getLastInsertValue'), array(), '', false
         );
 
         /** @var \TheSupport\Conventional\Model\Table\Generic|\PHPUnit_Framework_MockObject_MockObject $table */
@@ -138,6 +138,10 @@ class GenericSaveTest extends \PHPUnit_Framework_TestCase {
 
         $tableGateway->expects($this->once())
             ->method('insert')
+            ->will($this->returnValue(1));
+
+        $tableGateway->expects(($this->once()))
+            ->method('getLastInsertValue')
             ->will($this->returnValue(123));
 
         $savedEntity = $table->save($entity);

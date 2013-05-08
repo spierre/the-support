@@ -60,8 +60,8 @@ class Generic {
         $id = $entity->getId();
         $data = $entity->toArray($nullifyEmptyData);
         if(empty($id)) {
-            $id = $this->tableGateway->insert($data);
-            $entity->setId($id);
+            $this->tableGateway->insert($data);
+            $entity->setId($this->tableGateway->getLastInsertValue());
         }else {
             try{
                 if($this->find($id)) {

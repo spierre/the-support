@@ -18,6 +18,7 @@ abstract class Base {
     /**
      * @var string Primary key name
      */
+    protected $pk = 'id';
 
     /**
      * @return mixed

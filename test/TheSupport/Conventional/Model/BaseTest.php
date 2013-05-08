@@ -21,9 +21,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase {
 
     public function test_to_array_nullify_empty_fields_by_default()
     {
-        $model = new DummyModel(array('field' => ''));
+        $model = new DummyModel(array('field' => '', 'field2' => ""));
         $data = $model->toArray();
         $this->assertTrue($data['field'] === null);
+        $this->assertTrue($data['field2'] === null);
     }
 
     public function test_toArray_allow_nullification()
@@ -35,5 +36,5 @@ class BaseTest extends \PHPUnit_Framework_TestCase {
 }
 
 class DummyModel extends Base {
-    protected $attrs = array("field");
+    protected $attrs = array("field", 'field2');
 }

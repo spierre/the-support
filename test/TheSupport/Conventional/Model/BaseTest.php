@@ -23,11 +23,11 @@ class BaseTest extends \PHPUnit_Framework_TestCase {
     {
         $model = new DummyModel(array('field' => '', 'field2' => ""));
         $data = $model->toArray();
-        $this->assertTrue($data['field'] === null);
-        $this->assertTrue($data['field2'] === null);
+        $this->assertFalse(isset($data['field']));
+        $this->assertFalse(isset($data['field2']));
     }
 
-    public function test_toArray_allow_nullification()
+    public function test_toArray_allow_disabling_nullification()
     {
         $model = new DummyModel(array('field' => ''));
         $data = $model->toArray(false);

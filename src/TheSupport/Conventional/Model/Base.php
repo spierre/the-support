@@ -92,10 +92,9 @@ abstract class Base {
     {
         $data = array();
         foreach($this->attrs as $field) {
-            if(empty($this->{$field}) && $nullifyEmptyStrings) {
-                $this->{$field} = null;
+            if(!empty($this->{$field}) || !$nullifyEmptyStrings) {
+                $data[$field] = $this->$field;
             }
-            $data[$field] = $this->$field;
         }
         return $data;
     }

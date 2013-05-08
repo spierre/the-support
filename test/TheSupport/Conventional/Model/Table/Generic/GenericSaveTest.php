@@ -17,7 +17,7 @@ class GenericSaveTest extends \PHPUnit_Framework_TestCase {
         );
         $tableGateway->expects($this->once())
             ->method("insert")
-            ->with(array("field" => 'fieldValue', 'pkField' => null));
+            ->with(array("field" => 'fieldValue'));
 
         $table = new Generic($tableGateway);
         $entity = new DummyModel(array("field" => 'fieldValue'));

@@ -60,7 +60,13 @@ class Generic {
         if($entity->getId() === null) {
             $this->tableGateway->insert($entity->toArray());
         }else {
-            $this->tableGateway->update($entity->toArray(), array($entity->getPk() => $entity->getId()));
+            try{
+                if($this->find($entity->getId())) {
+                    $this->tableGateway->update($entity->toArray(), array($entity->getPk() => $entity->getId()));
+                }
+            }catch(Exception $e){
+                throw new Exception("Trying to update not existing entity", 0, $e);
+            }
         }
 
     }

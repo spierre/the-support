@@ -32,7 +32,7 @@ class Generic {
         if($with_select_do instanceof \Closure) {
             $with_select_do($select);
         }
-        return $this->tableGateway->selectWith($select);
+        return $this->getTableGateway()->selectWith($select);
     }
 
     /**
@@ -49,7 +49,7 @@ class Generic {
     public function getSelect()
     {
         if($this->select == null) {
-            $this->select = new Select($this->tableGateway->getTable());
+            $this->select = new Select($this->getTableGateway()->getTable());
         }
         return $this->select;
     }
@@ -60,12 +60,12 @@ class Generic {
         $id = $entity->getId();
         $data = $entity->toArray($nullifyEmptyData);
         if(empty($id)) {
-            $this->tableGateway->insert($data);
-            $entity->setId($this->tableGateway->getLastInsertValue());
+            $this->getTableGateway()->insert($data);
+            $entity->setId($this->getTableGateway()->getLastInsertValue());
         }else {
             try{
                 if($this->find($id)) {
-                    $this->tableGateway->update($data, array($entity->getPk() => $entity->getId()));
+                    $this->getTableGateway()->update($data, array($entity->getPk() => $entity->getId()));
                 }
             }catch(Exception $e){
                 throw new Exception("Trying to update not existing entity", 0, $e);
@@ -80,7 +80,7 @@ class Generic {
     public function find($id)
     {
         $model = $this->getModelObject();
-        $rows = $this->tableGateway->select(
+        $rows = $this->getTableGateway()->select(
             array( $model->getPk() => $id )
         );
         if(!$rows) {
@@ -94,6 +94,14 @@ class Generic {
      */
     public function getModelObject()
     {
-        return $this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype();
+        return $this->getTableGateway()->getResultSetPrototype()->getArrayObjectPrototype();
+    }
+
+    /**
+     * @return AbstractTableGateway
+     */
+    protected function getTableGateway()
+    {
+        return $this->tableGateway;
     }
 }

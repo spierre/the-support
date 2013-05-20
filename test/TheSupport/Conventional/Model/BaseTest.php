@@ -33,6 +33,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase {
         $data = $model->toArray(false);
         $this->assertTrue($data['field'] === '');
     }
+
+
 }
 
 class DummyModel extends Base {

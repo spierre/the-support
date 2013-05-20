@@ -47,8 +47,8 @@ abstract class Base {
     {
         $method = 'set' . $name;
         if (('mapper' == $name) || !method_exists($this, $method)) {
-            if(in_array($name, $this->attrs)) {
-                $this->$name = $value;
+            if($this->hasField($name)) {
+                $this->$name = $this->cast($name, $value);
             }
         }else{
             $this->$method($value);
@@ -59,7 +59,7 @@ abstract class Base {
     {
         $method = 'get' . $name;
         if (('mapper' == $name) || !method_exists($this, $method)) {
-            if(in_array($name, $this->attrs)) {
+            if($this->hasField($name)) {
                 return isset($this->$name)? $this->$name: null;
             }
         }
@@ -83,6 +83,7 @@ abstract class Base {
     public function setOptions(array $options)
     {
         foreach ($options as $key => $value) {
+            $value = $this->cast($key, $value);
             $this->$key = $value;
         }
         return $this;
@@ -102,5 +103,23 @@ abstract class Base {
     public function exchangeArray($data)
     {
         $this->setOptions($data);
+    }
+
+    private function cast($fieldName, $value)
+    {
+        $fieldDefinition = isset($this->attrs[$fieldName])? $this->attrs[$fieldName] : null;
+        if(is_array($fieldDefinition) && isset($fieldDefinition['type']) && $fieldDefinition['type'] === 'int') {
+            return (int)$value;
+        }
+        return (string)$value;
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    private function hasField($name)
+    {
+        return in_array($name, $this->attrs) || in_array($name, array_keys($this->attrs));
     }
 }

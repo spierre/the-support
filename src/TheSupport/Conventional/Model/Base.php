@@ -92,7 +92,10 @@ abstract class Base {
     public function toArray($nullifyEmptyStrings = true)
     {
         $data = array();
-        foreach($this->attrs as $field) {
+        foreach($this->attrs as $key => $field) {
+            if (is_array($field)) {
+                $field = $key;
+            }
             if(!empty($this->{$field}) || !$nullifyEmptyStrings) {
                 $data[$field] = $this->$field;
             }

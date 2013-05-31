@@ -5,34 +5,19 @@ use TheSupport\Conventional\Model\Base;
 
 class BaseFieldOverridingTest extends \PHPUnit_Framework_TestCase {
 
-    const CAST_FAIL = "field has not been casted to int";
-
-    public function test_should_cast_types()
+    public function test_casting()
     {
-        $model = new DummyModel(array('field' => '1'));
-        $this->assertTrue(
-            $model->field === 1,
-            self::CAST_FAIL
-        );
+        $model = new DummyModel(array('field'=>'foo', 'normal' => 'bar'));
+
+        $this->assertEquals('override', $model->field);
     }
 
-    public function test_types_should_be_casted_on_set()
+    public function test_to_array_should_consider_overriden_getters()
     {
-        $model = new DummyModel();
-        $model->field = '12';
-        $this->assertTrue(
-            $model->field === 12,
-            self::CAST_FAIL
-        );
-    }
-
-    public function test_types_should_be_strings_by_default()
-    {
-        $model = new DummyModel();
-        $model->normal = 12;
-        $this->assertTrue(
-            $model->normal === '12',
-            self::CAST_FAIL
+        $model = new DummyModel(array('field' => 1, 'normal' => '1'));
+        $this->assertEquals(
+            array('field' => 'override', 'normal' => '1'),
+            $model->toArray()
         );
     }
 
@@ -44,4 +29,9 @@ class DummyModel extends Base {
         "field" => array('type' => 'int'),
         'normal',
     );
+
+    public function getField()
+    {
+        return "override";
+    }
 }

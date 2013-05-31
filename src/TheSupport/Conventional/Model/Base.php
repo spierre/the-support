@@ -113,7 +113,7 @@ abstract class Base {
                 $field = $key;
             }
             if(!empty($this->values[$field]) || !$nullifyEmptyStrings) {
-                $data[$field] = $this->getValue($field);
+                $data[$field] = $this->$field;
             }
         }
         return $data;

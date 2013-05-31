@@ -9,14 +9,14 @@ class BaseFieldOverridingTest extends \PHPUnit_Framework_TestCase {
     {
         $model = new DummyModel(array('field'=>'foo', 'normal' => 'bar'));
 
-        $this->assertEquals('override', $model->field);
+        $this->assertEquals('foooverride', $model->field);
     }
 
     public function test_to_array_should_consider_overriden_getters()
     {
         $model = new DummyModel(array('field' => 1, 'normal' => '1'));
         $this->assertEquals(
-            array('field' => 'override', 'normal' => '1'),
+            array('field' => '1override', 'normal' => '1'),
             $model->toArray()
         );
     }
@@ -26,12 +26,12 @@ class BaseFieldOverridingTest extends \PHPUnit_Framework_TestCase {
 
 class DummyModel extends Base {
     protected $attrs = array(
-        "field" => array('type' => 'int'),
+        "field",
         'normal',
     );
 
     public function getField()
     {
-        return "override";
+        return $this->getValue("field") . "override";
     }
 }

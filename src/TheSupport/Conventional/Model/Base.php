@@ -17,17 +17,17 @@ abstract class Base {
 
     protected $values = array();
 
-    private function setValue($fieldName, $value)
+    protected function setValue($fieldName, $value)
     {
         $this->values[$fieldName] = $this->cast($fieldName, $value);
     }
 
-    private function getValue($fieldName)
+    protected function getValue($fieldName)
     {
         return isset($this->values[$fieldName])? $this->cast($fieldName, $this->values[$fieldName]): null;
     }
 
-    private function hasValue($fieldName)
+    protected function hasValue($fieldName)
     {
         return isset($this->values[$fieldName]);
     }

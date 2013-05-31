@@ -15,6 +15,23 @@ abstract class Base {
      */
     protected $attrs = array();
 
+    protected $values = array();
+
+    private function setValue($fieldName, $value)
+    {
+        $this->values[$fieldName] = $this->cast($fieldName, $value);
+    }
+
+    private function getValue($fieldName)
+    {
+        return isset($this->values[$fieldName])? $this->cast($fieldName, $this->values[$fieldName]): null;
+    }
+
+    private function hasValue($fieldName)
+    {
+        return isset($this->values[$fieldName]);
+    }
+
     /**
      * @var string Primary key name
      */
@@ -25,7 +42,7 @@ abstract class Base {
      * @note no combined primary keys supported
      */
     public function getId() {
-        return isset($this->{$this->getPk()})? $this->{$this->getPk()}: null;
+        return $this->hasValue($this->getPk())? $this->getValue($this->getPk()): null;
     }
 
     /**
@@ -48,7 +65,7 @@ abstract class Base {
         $method = 'set' . $name;
         if (('mapper' == $name) || !method_exists($this, $method)) {
             if($this->hasField($name)) {
-                $this->$name = $this->cast($name, $value);
+                $this->setValue($name, $this->cast($name, $value));
             }
         }else{
             $this->$method($value);
@@ -57,10 +74,10 @@ abstract class Base {
 
     public function __get($name)
     {
-        $method = 'get' . $name;
+        $method = 'get' . ucfirst($name);
         if (('mapper' == $name) || !method_exists($this, $method)) {
             if($this->hasField($name)) {
-                return isset($this->$name)? $this->$name: null;
+                return $this->getValue($name);
             }
         }
         return $this->$method();
@@ -70,7 +87,7 @@ abstract class Base {
     {
         if( strpos($name, 'get')== 0) {
             $attr = strtolower( substr($name, 3, strlen($name)) );
-            return $this->$attr;
+            return $this->getValue($attr);
         }
     }
 
@@ -83,8 +100,7 @@ abstract class Base {
     public function setOptions(array $options)
     {
         foreach ($options as $key => $value) {
-            $value = $this->cast($key, $value);
-            $this->$key = $value;
+            $this->setValue($key, $value);
         }
         return $this;
     }
@@ -92,12 +108,9 @@ abstract class Base {
     public function toArray($nullifyEmptyStrings = true)
     {
         $data = array();
-        foreach($this->attrs as $key => $field) {
-            if (is_array($field)) {
-                $field = $key;
-            }
-            if(!empty($this->{$field}) || !$nullifyEmptyStrings) {
-                $data[$field] = $this->$field;
+        foreach($this->attrs as $field) {
+            if(!empty($this->values[$field]) || !$nullifyEmptyStrings) {
+                $data[$field] = $this->getValue($field);
             }
         }
         return $data;

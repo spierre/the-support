@@ -36,6 +36,18 @@ class BaseTypeCastingTest extends \PHPUnit_Framework_TestCase {
         );
     }
 
+    public function test_to_array_should_work_fine()
+    {
+        $model = new DummyModel(array('field' => '1', 'normal' => '2'));
+        $this->assertEquals(
+            array(
+                'field' => 1,
+                'normal' => '2'
+            ),
+            $model->toArray()
+        );
+    }
+
 
 }
 

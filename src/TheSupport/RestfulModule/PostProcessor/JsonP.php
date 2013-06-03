@@ -7,13 +7,13 @@
 namespace TheSupport\RestfulModule\PostProcessor;
 
 
-class Json extends AbstractJson{
+class JsonP extends AbstractJson{
     /**
      * @param $result
      */
     protected function setResponse($result)
     {
-        $callback = $this->getRequest()->getQuery('callback');
-        $this->_response->setContent("$callback($result)");
+        $callback = $this->getRequest()->getQuery('jsonp-callback');
+        $this->getResponse()->setContent("$callback($result)");
     }
 }

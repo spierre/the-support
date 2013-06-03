@@ -10,7 +10,8 @@ return array(
     'di' => array(
         'instance' => array(
             'alias' => array(
-                'json-pp' => 'TheSupport\RestfulModule\PostProcessor\Json'
+                'json-pp' => 'TheSupport\RestfulModule\PostProcessor\Json',
+                'jsonp-pp' => 'TheSupport\RestfulModule\PostProcessor\JsonP'
             ),
         ),
     ),

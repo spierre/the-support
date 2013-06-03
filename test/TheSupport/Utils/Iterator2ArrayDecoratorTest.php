@@ -29,4 +29,28 @@ class Iterator2ArrayDecoratorTest extends \PHPUnit_Framework_TestCase {
         );
 
     }
+
+    public function test_should_work_with_append_iterator()
+    {
+        $obj = new \stdClass();
+        $obj->foo = "bar";
+
+        $it1 = new \ArrayIterator($obj);
+
+        $obj = new \stdClass();
+        $obj->baz = "bam";
+        $it2 = new \ArrayIterator($obj);
+
+        $multipleIterator = new \AppendIterator();
+        $multipleIterator->append($it1);
+        $multipleIterator->append($it2);
+
+        $arrayator = new Iterator2ArrayDecorator($multipleIterator);
+
+        $this->assertEquals(
+            array("foo" => "bar", "baz" => "bam"),
+            $arrayator->toArray()
+        );
+
+    }
 }

@@ -63,6 +63,7 @@ class Module {
 
             /** @var PostProcessor\AbstractPostProcessor $postProcessor */
             $postProcessor = $di->get($formatter . '-pp', array(
+                'request' => $e->getRequest(),
                 'response' => $e->getResponse(),
                 'vars' => $vars,
             ));

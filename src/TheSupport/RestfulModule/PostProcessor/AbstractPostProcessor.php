@@ -18,13 +18,19 @@ abstract class AbstractPostProcessor
 	protected $_response = null;
 
 	/**
+	 * @var null|\Zend\Http\Request
+	 */
+	protected $_request = null;
+
+	/**
 	 * @param $vars
 	 * @param \Zend\Http\Response $response
 	 */
-	public function __construct(\Zend\Http\Response $response, $vars = null)
+	public function __construct(\Zend\Http\Request $request, \Zend\Http\Response $response, $vars = null)
 	{
 		$this->_vars = $vars;
 		$this->_response = $response;
+        $this->_request = $request;
 	}
 
 	/**
@@ -34,6 +40,14 @@ abstract class AbstractPostProcessor
 	{
 		return $this->_response;
 	}
+
+    /**
+     * @return null|\Zend\Http\Request
+     */
+    public function getRequest()
+    {
+        return $this->_request;
+    }
 
 	/**
 	 * @abstract

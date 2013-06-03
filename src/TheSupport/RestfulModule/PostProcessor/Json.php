@@ -1,20 +1,12 @@
 <?php
+/**
+ * User: gpawlik
+ * To change this template use File | Settings | File Templates.
+ */
 
 namespace TheSupport\RestfulModule\PostProcessor;
 
-/**
- *
- */
-class Json extends AbstractPostProcessor
-{
-    public function process()
-    {
-        $result = \Zend\Json\Encoder::encode($this->_vars);
 
-        $this->_response->setContent($result);
+class Json extends AbstractJson{
 
-        $headers = $this->_response->getHeaders();
-        $headers->addHeaderLine('Content-Type', 'application/json');
-        $this->_response->setHeaders($headers);
-    }
 }

@@ -3,5 +3,8 @@
         <testsuite name="Conventional">
             <directory>test/TheSupport/Conventional</directory>
         </testsuite>
+        <testsuite name="Utils">
+            <directory>test/TheSupport/Utils</directory>
+        </testsuite>
     </testsuites>
 </phpunit>

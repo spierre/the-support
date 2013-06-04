@@ -65,4 +65,22 @@ class Iterator2ArrayDecoratorTest extends \PHPUnit_Framework_TestCase {
         );
 
     }
+
+    public function test_toArray_should_not_loose_items_when_same_numeric_key()
+    {
+        $it1 = new \ArrayIterator(array(0 => "zero", 1 => "one"));
+        $it2 = new \ArrayIterator(array(0 => "nic"));
+
+        $iterator = new \AppendIterator();
+        $iterator->append($it1);
+        $iterator->append($it2);
+
+        $arrayator = new Iterator2ArrayDecorator($iterator, Iterator2ArrayDecorator::REINDEX_ITEMS);
+
+        $this->assertEquals(
+            array("zero", "one", "nic"),
+            $arrayator->toArray()
+        );
+
+    }
 }

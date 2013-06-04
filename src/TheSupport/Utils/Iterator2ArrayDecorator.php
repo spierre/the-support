@@ -12,21 +12,29 @@ namespace TheSupport\Utils;
  */
 class Iterator2ArrayDecorator implements \Iterator{
 
+    const REINDEX_ITEMS = 1;
     /**
      * @var \Iterator
      */
     private $iterator;
 
-    public function __construct(\Iterator $iterator)
+    private $_reindexItems = false;
+
+    public function __construct(\Iterator $iterator, $flags = 0)
     {
         $this->iterator = $iterator;
+        $this->_reindexItems = $flags & self::REINDEX_ITEMS;
     }
 
     public function toArray()
     {
         $array = array();
         foreach($this->iterator as $key => $val) {
-            $array[$key] = $val;
+            if($this->_reindexItems) {
+                $array[] = $val;
+            }else {
+                $array[$key] = $val;
+            }
         }
         return $array;
     }

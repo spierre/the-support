@@ -36,8 +36,7 @@ class Module {
         $sharedEvents->attach(
             'Zend\Mvc\Application',
             MvcEvent::EVENT_DISPATCH_ERROR,
-            array($this, 'errorProcess'),
-            999
+            array($this, 'errorProcess')
         );
 
     }
@@ -100,6 +99,13 @@ class Module {
             }
             if ($configuration['errors']['show_exceptions']['trace']) {
                 $vars['error-trace'] = $exception->getTrace();
+            }
+            /** @var \Exception $prev */
+            while($prev = $exception->getPrevious()) {
+                $arrPrev = (array)$prev;
+                unset($arrPrev['xdebug_message']);
+                $vars['exception'][] = $arrPrev;
+                $exception = $prev;
             }
         }
 

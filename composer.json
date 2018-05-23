@@ -5,7 +5,7 @@
         "phpunit/phpunit": "3.*"
     },
     "require": {
-        "zendframework/zendframework": "2.1.4"
+        "zendframework/zendframework": "2.4.13"
     },
     "license": "MIT",
     "authors": [
